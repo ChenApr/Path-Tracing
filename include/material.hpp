@@ -28,6 +28,20 @@ public:
                    const Vector3f &dirToLight, const Vector3f &lightColor) {
         Vector3f shaded = Vector3f::ZERO;
         // 
+        Vector3f N = hit.getNormal().normalized();
+        Vector3f L = dirToLight.normalized();
+        Vector3f V = (-ray.getDirection()).normalized();
+        Vector3f R = (2 * Vector3f::dot(N, L) * N - L).normalized();
+
+        float dotLN = fmax(0.0f, Vector3f::dot(L, N));
+        Vector3f Diffuse = diffuseColor * dotLN;
+
+        float dotVR = fmax(0.0f, Vector3f::dot(V, R));
+        Vector3f Specular = specularColor * pow(dotVR, shininess);
+
+        shaded = lightColor * (Diffuse + Specular);
+
+
         return shaded;
     }
 

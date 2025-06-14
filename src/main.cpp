@@ -45,9 +45,18 @@ int main(int argc, char *argv[]) {
 
     Image image(width, height);
 
+    render(sceneParser, camera, group, image, bgColor, width, height);
+
+    image.SaveBMP(outputFile.c_str());
+
+    cout << "Hello! Computer Graphics!" << endl;
+    return 0;
+}
+
+void render(SceneParser& sceneParser, Camera* camera, Group* group, Image& image, const Vector3f& bgColor, int width, int height) {
     for(int x = 0; x < width; ++x) {
         for(int y = 0; y < height; ++y) {
-            Ray camRay = camera->generateRay(Vector2f(x, y));
+            Ray camRay = camera->generateRay(Vector2f(x + 0.5f, y + 0.5f));
             Hit hit;
             bool isIntersect = group->intersect(camRay, hit, 0);
             if(isIntersect) {
@@ -64,10 +73,4 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    
-    image.SaveBMP(outputFile.c_str());
-
-    cout << "Hello! Computer Graphics!" << endl;
-    return 0;
 }
-
